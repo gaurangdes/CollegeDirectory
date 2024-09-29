@@ -1,0 +1,25 @@
+package com.collegedirectory.constants;
+
+public class ApplicationConstants {
+
+    // User Roles
+    public static final String ROLE_STUDENT = "STUDENT";
+    public static final String ROLE_FACULTY = "FACULTY";
+    public static final String ROLE_ADMINISTRATOR = "ADMINISTRATOR";
+
+    // Error Messages
+    public static final String ERROR_INVALID_CREDENTIALS = "Invalid credentials or role";
+    public static final String ERROR_STUDENT_NOT_FOUND = "Student not found";
+    public static final String ERROR_FACULTY_NOT_FOUND = "Faculty not found";
+    public static final String ERROR_ADMINISTRATOR_NOT_FOUND = "Administrator not found";
+
+    // Success Messages
+    public static final String SUCCESS_PROFILE_UPDATED = "Profile updated successfully";
+
+    // Other Constants
+    public static final String DEFAULT_PROFILE_PICTURE = "/images/default-profile.png";
+
+    private ApplicationConstants() {
+        // Private constructor to prevent instantiation
+    }
+}

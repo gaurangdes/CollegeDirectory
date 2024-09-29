@@ -1,0 +1,31 @@
+@WebServlet("/login")
+public class LoginController extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String role = request.getParameter("role");
+
+        try {
+            // Validate credentials
+            User user = UserService.validateUser(username, password, role);
+            if (user != null) {
+                // Redirect based on role
+                if (role.equals("Student")) {
+                    response.sendRedirect("studentDashboard.jsp");
+                } else if (role.equals("Faculty Member")) {
+                    response.sendRedirect("facultyDashboard.jsp");
+                } else if (role.equals("Administrator")) {
+                    response.sendRedirect("adminDashboard.jsp");
+                }
+            } else {
+                throw new InvalidCredentialsException("Invalid credentials");
+            }
+        } catch (InvalidCredentialsException e) {
+            request.setAttribute("errorMessage", e.getMessage());
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("errorMessage", "An unexpected error occurred");
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+        }
+    }
+}

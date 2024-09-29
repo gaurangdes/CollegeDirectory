@@ -1,0 +1,24 @@
+package com.collegedirectory.dao;
+
+import com.collegedirectory.model.Administrator;
+import org.springframework.stereotype.Repository;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
+
+@Repository
+@Transactional
+public class AdministratorDAO {
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public void save(Administrator administrator) {
+        entityManager.merge(administrator);
+    }
+
+    public Administrator findById(int administratorId) {
+        return entityManager.find(Administrator.class, administratorId);
+    }
+}

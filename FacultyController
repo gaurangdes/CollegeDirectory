@@ -1,0 +1,45 @@
+@WebServlet("/faculty")
+public class FacultyController extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+
+        try {
+            if (action.equals("manageClassList")) {
+                // Fetch class list
+                int facultyId = Integer.parseInt(request.getParameter("facultyId"));
+                List<Student> classList = FacultyService.getClassList(facultyId);
+                request.setAttribute("classList", classList);
+                request.getRequestDispatcher("classList.jsp").forward(request, response);
+            } else if (action.equals("updateProfile")) {
+                // Fetch faculty profile
+                int facultyId = Integer.parseInt(request.getParameter("facultyId"));
+                Faculty faculty = FacultyService.getFacultyProfile(facultyId);
+                request.setAttribute("faculty", faculty);
+                request.getRequestDispatcher("updateFacultyProfile.jsp").forward(request, response);
+            }
+        } catch (Exception e) {
+            request.setAttribute("errorMessage", "An unexpected error occurred");
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+        }
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+
+        try {
+            if (action.equals("updateProfile")) {
+                // Update faculty profile
+                int facultyId = Integer.parseInt(request.getParameter("facultyId"));
+                String officeHours = request.getParameter("officeHours");
+                String email = request.getParameter("email");
+                String phone = request.getParameter("phone");
+
+                FacultyService.updateFacultyProfile(facultyId, officeHours, email, phone);
+                response.sendRedirect("faculty?action=viewProfile&facultyId=" + facultyId);
+            }
+        } catch (Exception e) {
+            request.setAttribute("errorMessage", "An unexpected error occurred");
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+        }
+    }
+}

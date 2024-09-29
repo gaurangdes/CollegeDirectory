@@ -1,0 +1,51 @@
+@WebServlet("/admin")
+public class AdminController extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+
+        try {
+            if (action.equals("manageRecords")) {
+                // Fetch all records
+                List<User> users = AdminService.getAllUsers();
+                request.setAttribute("users", users);
+                request.getRequestDispatcher("manageRecords.jsp").forward(request, response);
+            }
+        } catch (Exception e) {
+            request.setAttribute("errorMessage", "An unexpected error occurred");
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+        }
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+
+        try {
+            if (action.equals("addUser")) {
+                // Add a new user
+                String username = request.getParameter("username");
+                String password = request.getParameter("password");
+                String role = request.getParameter("role");
+
+                AdminService.addUser(username, password, role);
+                response.sendRedirect("admin?action=manageRecords");
+            } else if (action.equals("updateUser")) {
+                // Update an existing user
+                int userId = Integer.parseInt(request.getParameter("userId"));
+                String username = request.getParameter("username");
+                String password = request.getParameter("password");
+                String role = request.getParameter("role");
+
+                AdminService.updateUser(userId, username, password, role);
+                response.sendRedirect("admin?action=manageRecords");
+            } else if (action.equals("deleteUser")) {
+                // Delete a user
+                int userId = Integer.parseInt(request.getParameter("userId"));
+                AdminService.deleteUser(userId);
+                response.sendRedirect("admin?action=manageRecords");
+            }
+        } catch (Exception e) {
+            request.setAttribute("errorMessage", "An unexpected error occurred");
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+        }
+    }
+}

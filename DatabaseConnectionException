@@ -1,0 +1,4 @@
+public DatabaseConnectionException(String message) {
+        super(message);
+    }
+}
